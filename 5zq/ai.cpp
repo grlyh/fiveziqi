@@ -70,10 +70,10 @@ class AI_1 : public AI {
       }
     }
     // huo 3 & tiao 3
-    for (int i = 0; i < board_size; ++i) {
-      for (int j = 0; j < board_size; ++j) if (chess_board[i][j] == -1) {
-        for (int k = 0; k < 8; k += 2) {
-          for (int g = 0; g < 2; ++g) {
+    for (int g = 0; g < 2; ++g) {
+      for (int i = 0; i < board_size; ++i) {
+        for (int j = 0; j < board_size; ++j) if (chess_board[i][j] == -1) {
+          for (int k = 0; k < 8; k += 2) {
             int res = 0, cnum = 0, f = 0;
             for (int l = 1; l < 5; ++l) {
               int x = i + l * dx[k], y = j + l * dy[k];
@@ -91,12 +91,12 @@ class AI_1 : public AI {
               if (!inboard(x, y) || chess_board[x][y] != (color ^ g)) {
                 if (res && inboard(x, y) &&
                     chess_board[x][y] == (color ^ g ^ 1) &&
-                    chess_board[x - dx[k]][y - dy[k]] == (color ^ g)) f = 1;
+                    chess_board[x - dx[k + 1]][y - dy[k + 1]] == (color ^ g)) f = 1;
                 break;
               }
               res++, cnum++;
             }
-            if (cnum < 3) f = 1;
+            if (cnum < 3) continue;
             res = 1;
             for (int l = 1; l < 5; ++l) {
               int x = i + l * dx[k], y = j + l * dy[k];
@@ -108,12 +108,12 @@ class AI_1 : public AI {
               if (!inboard(x, y) || chess_board[x][y] == (color ^ g ^ 1)) break;
               res++;
             }
-            if (res < 5) f = 1;
-            if (!f) return (void) (chess_board[i][j] = color);
+            if (!f && res >= 5) return (void) (chess_board[i][j] = color);
           }
         }
       }
     }
+    getchar();
     // ai
 
     //
